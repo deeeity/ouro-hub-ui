@@ -1,8 +1,35 @@
+local UserInputService = game:GetService("UserInputService")
+-- Prequisites [change this]
+local user = "deeeity"
+local repo = "ouro-hub-ui"
+local branch = "master"
+
+-- Preloaded Functions
+local include = function(path)
+    local link = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(user, repo, branch, path)
+    return loadstring(game:HttpGet(link, true))()
+end
+
+local reloadEnv = function(latestVersion)
+    getgenv()["ohui"] = {
+        components = {
+            Window = include("components/window.lua")
+        },
+        version = latestVersion
+    }
+
+    print("Reloaded Environment")
+    print("Version", ohui.version)
+end
+
 -- Services
 local http = game:GetService("HttpService")
 
 -- Get latest version
-local version = http:JSONDecode(loadstring(game:HttpGet("", true))())
+local latestVersion = http:JSONDecode(include("info.json"))['version']
 
--- Initialize the environment
-getgenv()["ouro-ui"] = ouro-ui or {}
+if getgenv()["ohui"] ~= nil and ohui.version ~= nil and ohui.version < latestVersion then
+    reloadEnv(latestVersion)
+end
+
+
