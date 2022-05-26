@@ -7,7 +7,7 @@ local branch = "master"
 local http = game:GetService("HttpService")
 
 -- Preloaded Functions
-local include = function(path)
+local get = function(path)
     local link = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(user, repo, branch, path)
     local data = syn.request({
         Url = link,
@@ -21,11 +21,13 @@ local include = function(path)
     end
 end
 
-local reloadEnv = function(latestVersion)
+local reloadEnv = function()
+    local latestVersion = get("info.json")['version']
+
     local function load()
         getgenv()["ohui"] = {
             components = {
-                Window = include("components/window.lua")
+                Window = get("components/window.lua")
             },
             version = latestVersion
         }
@@ -34,12 +36,13 @@ local reloadEnv = function(latestVersion)
         return
     end
 
-    local latestVersion = include("info.json")['version']
     if not getgenv()["ohui"] then
         load()
+        return
     else
         if ohui.version < latestVersion then
             load()
+            return
         end
     end
 
