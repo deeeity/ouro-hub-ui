@@ -1,5 +1,4 @@
-local UserInputService = game:GetService("UserInputService")
--- Prequisites [change this]
+-- Prerequisites [change this]
 local user = "deeeity"
 local repo = "ouro-hub-ui"
 local branch = "master"
@@ -7,7 +6,10 @@ local branch = "master"
 -- Preloaded Functions
 local include = function(path)
     local link = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(user, repo, branch, path)
-    return loadstring(game:HttpGet(link, true))()
+    return syn.request({
+        Url = link,
+        Method = "GET"
+    }).Body
 end
 
 local reloadEnv = function(latestVersion)
