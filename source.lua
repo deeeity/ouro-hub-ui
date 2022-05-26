@@ -6,10 +6,12 @@ local branch = "master"
 -- Preloaded Functions
 local include = function(path)
     local link = ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(user, repo, branch, path)
-    return syn.request({
-        Url = link,
-        Method = "GET"
-    }).Body
+    return loadstring(
+        syn.request({
+            Url = link,
+            Method = "GET"
+        }).Body
+    )
 end
 
 local reloadEnv = function(latestVersion)
